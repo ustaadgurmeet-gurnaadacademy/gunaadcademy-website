@@ -1,0 +1,7 @@
+.vercel/
+node_modules/
+design-source/
+*.log
+*.env*
+.DS_Store
+Thumbs.db

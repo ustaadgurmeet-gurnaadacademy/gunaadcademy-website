@@ -1,0 +1,6 @@
+.git
+design-source
+docs
+README.md
+*.log
+*.env*

@@ -1,0 +1,17 @@
+{
+  "name": "Gurnaad Academy",
+  "short_name": "Gurnaad",
+  "description": "The living tradition of Gurmat Sangeet.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f1e8",
+  "theme_color": "#f4f1e8",
+  "icons": [
+    {
+      "src": "/assets/brand/gurnaad-logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
