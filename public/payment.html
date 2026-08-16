@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Pay Gurnaad Academy fees and view payment receipts." />
+    <title>Gurnaad Academy - Fee Payment</title>
+    <link rel="icon" href="assets/brand/gurnaad-logo.png" type="image/png" />
+    <link rel="apple-touch-icon" href="assets/brand/gurnaad-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="payment.css" />
+  </head>
+  <body>
+    <div class="portal-shell">
+      <header class="portal-header">
+        <a class="brand-link" href="index.html" aria-label="Back to Gurnaad Academy homepage">
+          <img src="assets/brand/gurnaad-logo.png" alt="Gurnaad Academy logo" />
+          <span>Gurnaad Academy</span>
+        </a>
+        <nav class="portal-nav" aria-label="Portal navigation">
+          <a href="index.html">Main Site</a>
+          <a href="#admin">Admin</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="payment-title">
+          <div class="intro">
+            <p class="eyebrow">Fee payment portal</p>
+            <h1 id="payment-title">Pay academy fees securely.</h1>
+            <p class="lead">
+              Enter the student details, confirm the INR amount, and complete payment. A receipt will be shown after payment and emailed once the live email service is connected.
+            </p>
+            <div class="trust-row" aria-label="Payment notes">
+              <div><strong>INR</strong><span>All payments collected in rupees</span></div>
+              <div><strong>Receipt</strong><span>Instant receipt after payment</span></div>
+              <div><strong>Admin</strong><span>Payment records visible to academy</span></div>
+            </div>
+          </div>
+
+          <form class="payment-card" id="payment-form">
+            <div class="card-heading">
+              <h2>Student details</h2>
+              <span class="status-pill" id="connection-status">Local preview</span>
+            </div>
+
+            <div class="form-grid">
+              <label>
+                Student name
+                <input name="studentName" autocomplete="name" required placeholder="Full name" />
+              </label>
+              <label>
+                Phone number
+                <input name="phone" autocomplete="tel" inputmode="tel" required placeholder="+91 98765 43210" />
+              </label>
+              <label>
+                Email for receipt
+                <input name="email" autocomplete="email" inputmode="email" required placeholder="student@example.com" />
+              </label>
+              <label>
+                Student ID
+                <input name="studentId" required placeholder="GA-001" />
+              </label>
+              <label>
+                What are they learning?
+                <input name="learning" required placeholder="Vocal, Dilruba, Rabab..." />
+              </label>
+              <label>
+                Student type
+                <select name="studentType" required>
+                  <option value="">Select type</option>
+                  <option>Indian student</option>
+                  <option>Foreign student</option>
+                </select>
+              </label>
+              <label>
+                Payment for
+                <select name="paymentFor" required>
+                  <option value="">Select reason</option>
+                  <option>Monthly fee</option>
+                  <option>Registration</option>
+                  <option>Instrument class</option>
+                  <option>Workshop</option>
+                  <option>Other</option>
+                </select>
+              </label>
+              <label>
+                Amount
+                <span class="amount-row">
+                  <input value="INR" aria-label="Currency" readonly />
+                  <input name="amount" inputmode="numeric" required min="1" type="number" placeholder="5000" />
+                </span>
+              </label>
+              <label class="full">
+                Notes
+                <textarea name="notes" placeholder="Month, batch, or any message for academy"></textarea>
+              </label>
+            </div>
+
+            <button class="pay-button" type="submit">Continue to Razorpay</button>
+            <p class="helper" id="payment-status">Payment orders are created securely on the server. Razorpay secrets never enter the browser.</p>
+          </form>
+        </section>
+
+        <section class="lower-grid" aria-label="Admin and receipt preview">
+          <div class="admin-card" id="admin">
+            <h2>Admin access</h2>
+            <p class="helper" id="admin-status">Temporary admin code for prototype. This will be replaced with a server-checked login before launch.</p>
+            <div class="admin-login">
+              <input id="admin-code" type="password" inputmode="numeric" maxlength="4" placeholder="4 digit code" aria-label="Admin code" />
+              <button class="admin-button" id="admin-unlock" type="button">Unlock</button>
+            </div>
+          </div>
+
+          <div class="receipt-card">
+            <h2>Latest receipt</h2>
+            <p class="helper" id="receipt-empty">Fill the form to preview the receipt layout.</p>
+            <article class="receipt-box is-hidden" id="receipt-box"></article>
+            <button class="print-button is-hidden" id="print-receipt" type="button">Print receipt</button>
+          </div>
+        </section>
+
+        <section class="admin-card is-hidden" id="admin-panel" aria-live="polite">
+          <h2>Payment records</h2>
+          <p class="helper">Firestore records appear here when Firebase is configured. Local preview records are shown otherwise.</p>
+          <div class="table-wrap">
+            <table class="payment-table">
+              <thead>
+                <tr>
+                  <th>Receipt</th>
+                  <th>Student</th>
+                  <th>Student ID</th>
+                  <th>Payment for</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody id="payment-rows"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="firebase-config.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script type="module" src="payment.js"></script>
+  </body>
+</html>
