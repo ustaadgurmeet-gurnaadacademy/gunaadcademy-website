@@ -1,8 +1,8 @@
 const crypto = require("crypto");
 
-const ADMIN_EMAIL = "ustadgurmeetsingh@gurnaadacademy.com";
+const ADMIN_EMAIL = "gurmeetragi64@gmail.com";
 const COOKIE_NAME = "gurnaad_admin";
-const SESSION_TTL_SECONDS = 60 * 60 * 8;
+const SESSION_TTL_SECONDS = 60 * 60 * 24 * 7;
 
 function getSecret() {
   return (

@@ -91,7 +91,7 @@ FIREBASE_SERVICE_ACCOUNT_JSON
 
 Use either the three split Firebase Admin variables or the single JSON variable, not both.
 
-`ADMIN_PASSWORD` is the password for `/admin`. Keep it in Vercel only; do not commit the real password to GitHub.
+`ADMIN_PASSWORD` is the password for `/admin`. Keep it in Vercel only; do not commit the real password to GitHub. Admin sessions use an HttpOnly cookie and expire after 7 days, or immediately when the admin clicks Log out.
 
 Never put `RAZORPAY_KEY_SECRET`, `FIREBASE_PRIVATE_KEY`, `FIREBASE_SERVICE_ACCOUNT_JSON`, or `ADMIN_PASSWORD` in `public/` files. Anything inside `public/` is visible in the browser.
 
