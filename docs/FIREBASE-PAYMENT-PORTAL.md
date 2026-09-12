@@ -1,6 +1,6 @@
 # Firebase Payment Portal Setup
 
-The payment portal uses Firebase Web SDK browser modules and writes test records to:
+The payment portal creates Razorpay orders through Vercel API routes and stores payment records in Firestore:
 
 ```text
 payments
@@ -25,7 +25,7 @@ Firebase web config is public client configuration, not a server secret. Do not 
 
 ## 2. Test Firestore Rules
 
-For local testing only, Firestore can allow writes and reads to `payments`.
+For early testing only, Firestore can allow public creates to `payments`. Admin reads are handled server-side through Firebase Admin credentials, so the public website does not need read access.
 
 ```js
 rules_version = '2';
@@ -34,13 +34,13 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /payments/{paymentId} {
       allow create: if true;
-      allow read: if true;
+      allow read: if false;
     }
   }
 }
 ```
 
-Before public launch, replace these rules with authenticated/admin-only read access and a server-verified payment write flow.
+Before public launch, move payment creation fully behind the server-verified payment flow and keep public reads denied.
 
 ## 3. Stored Payment Shape
 
@@ -80,6 +80,7 @@ RAZORPAY_KEY_SECRET
 FIREBASE_PROJECT_ID
 FIREBASE_CLIENT_EMAIL
 FIREBASE_PRIVATE_KEY
+ADMIN_PASSWORD
 ```
 
 Alternative Firebase Admin setup:
@@ -90,7 +91,9 @@ FIREBASE_SERVICE_ACCOUNT_JSON
 
 Use either the three split Firebase Admin variables or the single JSON variable, not both.
 
-Never put `RAZORPAY_KEY_SECRET`, `FIREBASE_PRIVATE_KEY`, or `FIREBASE_SERVICE_ACCOUNT_JSON` in `public/` files. Anything inside `public/` is visible in the browser.
+`ADMIN_PASSWORD` is the password for `/admin`. Keep it in Vercel only; do not commit the real password to GitHub.
+
+Never put `RAZORPAY_KEY_SECRET`, `FIREBASE_PRIVATE_KEY`, `FIREBASE_SERVICE_ACCOUNT_JSON`, or `ADMIN_PASSWORD` in `public/` files. Anything inside `public/` is visible in the browser.
 
 ## 6. Local Testing
 

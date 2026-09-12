@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Gurnaad Academy admin payment records." />
+    <title>Gurnaad Academy - Admin Payments</title>
+    <link rel="icon" href="assets/brand/gurnaad-logo.png" type="image/png" />
+    <link rel="apple-touch-icon" href="assets/brand/gurnaad-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="payment.css" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <div class="portal-shell admin-shell">
+      <header class="portal-header">
+        <a class="brand-link" href="payment.html" aria-label="Back to payment portal">
+          <img src="assets/brand/gurnaad-logo.png" alt="Gurnaad Academy logo" />
+          <span>Gurnaad Academy</span>
+        </a>
+        <nav class="portal-nav" aria-label="Admin navigation">
+          <a href="payment.html">Payment Portal</a>
+          <a href="index.html">Main Site</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="admin-hero" id="login-view">
+          <div>
+            <p class="eyebrow">Admin login</p>
+            <h1>Payment records.</h1>
+            <p class="lead">Sign in to view payment receipts saved in Firebase.</p>
+          </div>
+
+          <form class="payment-card admin-login-card" id="admin-login-form">
+            <div class="card-heading">
+              <h2>Admin access</h2>
+            </div>
+            <label>
+              Email
+              <input name="email" type="email" autocomplete="username" required value="ustadgurmeetsingh@gurnaadacademy.com" />
+            </label>
+            <label>
+              Password
+              <input name="password" type="password" autocomplete="current-password" required placeholder="Enter admin password" />
+            </label>
+            <button class="pay-button" type="submit">Log in</button>
+            <p class="helper" id="login-status">Use the academy admin email and password.</p>
+          </form>
+        </section>
+
+        <section class="admin-dashboard is-hidden" id="dashboard-view" aria-live="polite">
+          <div class="dashboard-heading">
+            <div>
+              <p class="eyebrow">Admin dashboard</p>
+              <h1>Payments</h1>
+              <p class="helper" id="dashboard-status">Loading payment records...</p>
+            </div>
+            <div class="dashboard-actions">
+              <button class="print-button" id="refresh-payments" type="button">Refresh</button>
+              <button class="print-button" id="logout-admin" type="button">Log out</button>
+            </div>
+          </div>
+
+          <div class="payment-card" id="payment-list-view">
+            <div class="table-wrap">
+              <table class="payment-table admin-payment-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Student ID</th>
+                    <th>Payment for</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-payment-rows"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <article class="payment-card payment-detail is-hidden" id="payment-detail-view">
+            <div class="detail-actions">
+              <button class="print-button" id="back-to-list" type="button">Back to payments</button>
+              <button class="print-button" id="print-admin-receipt" type="button">Print receipt</button>
+            </div>
+            <div id="admin-receipt"></div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="admin.js"></script>
+  </body>
+</html>

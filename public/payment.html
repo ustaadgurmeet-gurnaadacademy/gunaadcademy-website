@@ -21,7 +21,7 @@
         </a>
         <nav class="portal-nav" aria-label="Portal navigation">
           <a href="index.html">Main Site</a>
-          <a href="#admin">Admin</a>
+          <a href="admin.html">Admin Login</a>
         </nav>
       </header>
 
@@ -104,40 +104,12 @@
           </form>
         </section>
 
-        <section class="lower-grid" aria-label="Admin and receipt preview">
-          <div class="admin-card" id="admin">
-            <h2>Admin access</h2>
-            <p class="helper" id="admin-status">Temporary admin code for prototype. This will be replaced with a server-checked login before launch.</p>
-            <div class="admin-login">
-              <input id="admin-code" type="password" inputmode="numeric" maxlength="4" placeholder="4 digit code" aria-label="Admin code" />
-              <button class="admin-button" id="admin-unlock" type="button">Unlock</button>
-            </div>
-          </div>
-
+        <section class="lower-grid single-receipt" aria-label="Receipt preview">
           <div class="receipt-card">
             <h2>Latest receipt</h2>
             <p class="helper" id="receipt-empty">Fill the form to preview the receipt layout.</p>
             <article class="receipt-box is-hidden" id="receipt-box"></article>
             <button class="print-button is-hidden" id="print-receipt" type="button">Print receipt</button>
-          </div>
-        </section>
-
-        <section class="admin-card is-hidden" id="admin-panel" aria-live="polite">
-          <h2>Payment records</h2>
-          <p class="helper">Firestore records appear here when Firebase is configured. Local preview records are shown otherwise.</p>
-          <div class="table-wrap">
-            <table class="payment-table">
-              <thead>
-                <tr>
-                  <th>Receipt</th>
-                  <th>Student</th>
-                  <th>Student ID</th>
-                  <th>Payment for</th>
-                  <th>Amount</th>
-                </tr>
-              </thead>
-              <tbody id="payment-rows"></tbody>
-            </table>
           </div>
         </section>
       </main>

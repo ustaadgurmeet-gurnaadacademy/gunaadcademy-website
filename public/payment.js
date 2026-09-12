@@ -1,20 +1,16 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-import { collection, getDocs, getFirestore, orderBy, query } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 const form = document.querySelector("#payment-form");
 const receiptBox = document.querySelector("#receipt-box");
 const receiptEmpty = document.querySelector("#receipt-empty");
 const printReceiptButton = document.querySelector("#print-receipt");
-const adminPanel = document.querySelector("#admin-panel");
-const paymentRows = document.querySelector("#payment-rows");
 const connectionStatus = document.querySelector("#connection-status");
 const paymentStatus = document.querySelector("#payment-status");
-const adminStatus = document.querySelector("#admin-status");
 const localPayments = [];
 
 const firebaseConfig = window.GURNAAD_FIREBASE_CONFIG;
 const hasFirebaseConfig = Boolean(firebaseConfig?.apiKey && !firebaseConfig.apiKey.startsWith("YOUR_"));
-const db = hasFirebaseConfig ? getFirestore(initializeApp(firebaseConfig)) : null;
+if (hasFirebaseConfig) initializeApp(firebaseConfig);
 const FIRESTORE_TIMEOUT_MS = 12000;
 
 if (hasFirebaseConfig) {
@@ -82,20 +78,6 @@ function renderReceipt(payment) {
   `;
 }
 
-function renderAdminRows(payments) {
-  paymentRows.innerHTML = payments.length
-    ? payments.map((payment) => `
-        <tr>
-          <td>${escapeHtml(payment.receiptNumber)}</td>
-          <td>${escapeHtml(payment.studentName)}</td>
-          <td>${escapeHtml(payment.studentId)}</td>
-          <td>${escapeHtml(payment.paymentFor)}</td>
-          <td>INR ${escapeHtml(payment.amount)}</td>
-        </tr>
-      `).join("")
-    : `<tr><td colspan="5">No payments found yet.</td></tr>`;
-}
-
 function toPaymentRecord(formData) {
   return {
     studentName: formData.studentName.trim(),
@@ -114,16 +96,6 @@ function toPaymentRecord(formData) {
     paymentStatus: "LOCAL_PREVIEW",
     paymentProvider: "RAZORPAY",
     createdAtClient: new Date().toISOString()
-  };
-}
-
-function fromFirestorePayment(snapshot) {
-  const data = snapshot.data();
-  return {
-    ...data,
-    amount: formatAmount((data.amountMinor || 0) / 100),
-    receiptNumber: data.receiptNumber || snapshot.id,
-    receiptDate: data.receiptDate || "Not recorded"
   };
 }
 
@@ -183,14 +155,6 @@ function openRazorpayCheckout({ order, record }) {
   });
 }
 
-async function loadPayments() {
-  if (!db) return localPayments;
-
-  const paymentsQuery = query(collection(db, "payments"), orderBy("createdAtClient", "desc"));
-  const snapshot = await getDocs(paymentsQuery);
-  return snapshot.docs.map(fromFirestorePayment);
-}
-
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const data = Object.fromEntries(new FormData(form).entries());
@@ -205,7 +169,6 @@ form.addEventListener("submit", async (event) => {
     if (!hasFirebaseConfig) {
       localPayments.unshift(record);
       renderReceipt(record);
-      renderAdminRows(localPayments);
       paymentStatus.textContent = "Local preview only. Add Firebase config and Vercel env vars for Razorpay.";
       form.reset();
       return;
@@ -242,7 +205,6 @@ form.addEventListener("submit", async (event) => {
     };
 
     renderReceipt(paidRecord);
-    renderAdminRows(await withTimeout(loadPayments(), "Firestore read did not respond."));
     paymentStatus.textContent = "Payment verified and receipt is ready.";
     form.reset();
   } catch (error) {
@@ -251,25 +213,6 @@ form.addEventListener("submit", async (event) => {
   } finally {
     submitButton.disabled = false;
     submitButton.textContent = "Continue to Razorpay";
-  }
-});
-
-document.querySelector("#admin-unlock").addEventListener("click", async () => {
-  const code = document.querySelector("#admin-code").value.trim();
-  if (code !== "1234") {
-    alert("Invalid admin code");
-    return;
-  }
-
-  adminPanel.classList.remove("is-hidden");
-  adminStatus.textContent = db ? "Loading Firestore payments..." : "Showing local preview payments only.";
-  try {
-    renderAdminRows(await withTimeout(loadPayments(), "Firestore read did not respond."));
-    adminStatus.textContent = db ? "Showing Firestore payment records." : "Showing local preview payments only.";
-  } catch (error) {
-    console.error(error);
-    adminStatus.textContent = "Could not load Firestore payments. Check Firebase config and Firestore rules.";
-    renderAdminRows(localPayments);
   }
 });
 
